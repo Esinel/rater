@@ -2,12 +2,14 @@
 
 import { Star } from "lucide-react";
 import { useRef, useState } from "react";
+import { cn } from "@/lib/utils/cn";
 
 type ReviewItemProps = {
   title: string;
   description: string;
   name: string;
   onScoreSelected?: (score: number) => void;
+  isInvalid?: boolean;
 };
 
 export function ReviewItem({
@@ -15,6 +17,7 @@ export function ReviewItem({
   description,
   name,
   onScoreSelected,
+  isInvalid,
 }: ReviewItemProps) {
   const [selectedScore, setSelectedScore] = useState<number>(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -25,7 +28,12 @@ export function ReviewItem({
   };
 
   return (
-    <div className="p-6 rounded-lg shadow-sm min-h-[200px] flex flex-col">
+    <div
+      className={cn(
+        "p-6 rounded-lg shadow-sm min-h-[200px] flex flex-col",
+        isInvalid && "border-1 border-red-500"
+      )}
+    >
       <h3 className="text-lg font-semibold mb-4">{title}</h3>
       <p className="text-gray-600 mb-6 flex-grow">{description}</p>
       <div className="flex gap-2">

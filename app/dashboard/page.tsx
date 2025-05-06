@@ -24,7 +24,8 @@ export default async function Dashboard() {
     .from("rating")
     .select("*")
     .eq("organization_id", 1)
-    .gte("created_at", new Date().toISOString().split("T")[0]);
+    .gte("created_at", new Date().toISOString().split("T")[0])
+    .order("created_at", { ascending: false });
 
   const { data: workerData } = await supabase
     .from("worker")

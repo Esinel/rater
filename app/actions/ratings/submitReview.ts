@@ -12,15 +12,22 @@ export async function submitReview(prevState: any, formData: FormData) {
   // Extract data from the form
   const qrCode = formData.get("qrCode") as string;
   const workerId = formData.get("workerId") as string;
-  const ratings = {
-    kindness: Number(formData.get("kindness")),
-    behavior: Number(formData.get("behavior")),
-    quality: Number(formData.get("quality")),
-    timeliness: Number(formData.get("timeliness")),
-    cleanliness: Number(formData.get("cleanliness")),
-    overall: Number(formData.get("overall")),
-  };
   const comment = formData.get("comment") as string;
+
+  // Collect all rating fields dynamically
+  const ratings: Record<string, number> = {};
+
+  // Iterate through all form fields to find rating values
+  for (const [key, value] of formData.entries()) {
+    // Skip non-rating fields
+    if (key === "qrCode" || key === "workerId" || key === "comment") continue;
+
+    // Convert the value to a number and add to ratings object
+    const numValue = Number(value);
+    if (!isNaN(numValue)) {
+      ratings[key] = numValue;
+    }
+  }
 
   // Calculate average score
   const averageScore =
@@ -39,13 +46,19 @@ export async function submitReview(prevState: any, formData: FormData) {
       )
     `);
 
-  console.log(ratingItems);
-
   if (ratingItemsError) {
     return {
       message: "Failed to fetch rating items. " + ratingItemsError.message,
     };
   }
+
+  const { data: qrCodeData } = await supabase
+    .from("qr_code")
+    .select("id")
+    .eq("qr_code", qrCode)
+    .single();
+
+  const qrCodeId = qrCodeData?.id ?? 0;
 
   // Create a mapping of rating names to their IDs
   const ratingItemMap = ratingItems.reduce((acc, item) => {
@@ -57,7 +70,7 @@ export async function submitReview(prevState: any, formData: FormData) {
   const { data: ratingData, error: ratingError } = await supabase
     .from("rating")
     .insert({
-      qr_code_id: Number(qrCode),
+      qr_code_id: qrCodeId,
       worker_id: Number(workerId),
       score: averageScore,
       comment,
