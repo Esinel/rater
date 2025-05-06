@@ -41,8 +41,11 @@ export default async function ReviewPage({ params }: ReviewPageProps) {
 
   return (
     <div className="min-h-screen p-8">
-      <h1 className="text-2xl font-bold mb-4">
-        Review: {workerData[0].first_name} {workerData[0].last_name}
+      <h1 className="text-2xl mb-4">
+        Recenzija za: <br />
+        <span className="font-bold">
+          {workerData[0].first_name} {workerData[0].last_name}
+        </span>
       </h1>
 
       <ReviewView
