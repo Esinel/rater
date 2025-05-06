@@ -1,17 +1,17 @@
 "use client";
 
-import { ReviewItem } from "@/components/ReviewItem/ReviewItem";
-import { submitReview } from "@/app/actions";
+import { ReviewItem } from "@/components/features/reviews/ReviewItem";
+import { submitReview } from "@/app/actions/ratings/submitReview";
 import { useActionState, useRef } from "react";
 import { Tables } from "@/database.types";
 
-interface ReviewViewProps {
+type ReviewProps = {
   qrCode: string;
   workerId: string;
   ratingItems: Tables<"rating_item">[];
-}
+};
 
-export function ReviewView({ qrCode, workerId, ratingItems }: ReviewViewProps) {
+export function Review({ qrCode, workerId, ratingItems }: ReviewProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [, formAction, isSubmitting] = useActionState(submitReview, null);
 

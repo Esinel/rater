@@ -3,12 +3,12 @@
 import { Star } from "lucide-react";
 import { useRef, useState } from "react";
 
-interface ReviewItemProps {
+type ReviewItemProps = {
   title: string;
   description: string;
   name: string;
   onScoreSelected?: (score: number) => void;
-}
+};
 
 export function ReviewItem({
   title,

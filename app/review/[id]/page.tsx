@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
-import { createClient } from "@/utils/supabase/server";
-import { ReviewView } from "./view";
+import { createClient } from "@/lib/supabase/server";
+import { Review } from "@/components/features/reviews/Review";
 
 interface ReviewPageProps {
   params: {
@@ -48,7 +48,7 @@ export default async function ReviewPage({ params }: ReviewPageProps) {
         </span>
       </h1>
 
-      <ReviewView
+      <Review
         qrCode={qrCode}
         workerId={workerId?.toString() || ""}
         ratingItems={ratingItemsData ?? []}
