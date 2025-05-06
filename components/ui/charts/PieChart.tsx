@@ -2,22 +2,14 @@
 
 import { Label, Pie, PieChart } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../chart";
-import { useMemo } from "react";
 import { chartConfig } from "./config";
 
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 190, fill: "var(--color-other)" },
+const chartData = (visitors: number = 0) => [
+  { reviews: "review", visitors: visitors, fill: "var(--color-desktop)" },
 ];
 
-export function PieChartExample() {
-  const totalVisitors = useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
-  }, []);
-
+export function PieChartExample({ visitors }: { visitors: number }) {
+  const data = chartData(visitors);
   return (
     <ChartContainer config={chartConfig}>
       <PieChart>
@@ -26,7 +18,7 @@ export function PieChartExample() {
           content={<ChartTooltipContent hideLabel />}
         />
         <Pie
-          data={chartData}
+          data={data}
           dataKey="visitors"
           nameKey="browser"
           innerRadius={60}
@@ -47,14 +39,14 @@ export function PieChartExample() {
                       y={viewBox.cy}
                       className="fill-foreground text-3xl font-bold"
                     >
-                      {totalVisitors.toLocaleString()}
+                      {visitors.toLocaleString()}
                     </tspan>
                     <tspan
                       x={viewBox.cx}
                       y={(viewBox.cy || 0) + 24}
                       className="fill-muted-foreground"
                     >
-                      Visitors
+                      Reviews
                     </tspan>
                   </text>
                 );
