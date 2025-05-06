@@ -9,7 +9,7 @@ export default function ThankYouPage() {
           <CheckCircle className="w-20 h-20 text-green-500" />
         </div>
 
-        <h1 className="text-3xl font-bold text-gray-800 text-center">
+        <h1 className="text-3xl font-bold text-center">
           Thank you for your review!
         </h1>
 
