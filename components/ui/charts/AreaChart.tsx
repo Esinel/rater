@@ -4,16 +4,31 @@ import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../chart";
 import { chartConfig } from "./config";
 
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-];
+interface AreaChartProps {
+  data?: {
+    month: string;
+    reviews: number;
+  }[];
+}
 
-export function AreaChartExample() {
+export function AreaChartExample({ data }: AreaChartProps) {
+  console.log("AreaChart props:", { data }); // More detailed debug log
+
+  if (!data || data.length === 0) {
+    console.log("No data available for chart");
+    return (
+      <div className="p-4 text-center text-gray-500">No data available</div>
+    );
+  }
+
+  // Ensure data is in the correct format
+  const chartData = data.map((item) => ({
+    month: item.month,
+    reviews: Number(item.reviews) || 0,
+  }));
+
+  console.log("Processed chart data:", chartData);
+
   return (
     <ChartContainer config={chartConfig}>
       <AreaChart
@@ -34,46 +49,21 @@ export function AreaChartExample() {
         />
         <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
         <defs>
-          <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
-            <stop
-              offset="5%"
-              stopColor="var(--color-desktop)"
-              stopOpacity={0.8}
-            />
+          <linearGradient id="fillReviews" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="rgb(65, 105, 225)" stopOpacity={0.8} />
             <stop
               offset="95%"
-              stopColor="var(--color-desktop)"
-              stopOpacity={0.1}
-            />
-          </linearGradient>
-          <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
-            <stop
-              offset="5%"
-              stopColor="var(--color-mobile)"
-              stopOpacity={0.8}
-            />
-            <stop
-              offset="95%"
-              stopColor="var(--color-mobile)"
+              stopColor="rgb(65, 105, 225)"
               stopOpacity={0.1}
             />
           </linearGradient>
         </defs>
         <Area
-          dataKey="mobile"
+          dataKey="reviews"
           type="natural"
-          fill="url(#fillMobile)"
+          fill="url(#fillReviews)"
           fillOpacity={0.4}
-          stroke="var(--color-mobile)"
-          stackId="a"
-        />
-        <Area
-          dataKey="desktop"
-          type="natural"
-          fill="url(#fillDesktop)"
-          fillOpacity={0.4}
-          stroke="var(--color-desktop)"
-          stackId="a"
+          stroke="rgb(65, 105, 225)"
         />
       </AreaChart>
     </ChartContainer>
